@@ -7,6 +7,7 @@ import DashboardLayout from '../components/layouts/DashboardLayout.jsx';
 const LandingPage = lazy(() => import('../features/landing/LandingPage.jsx'));
 const EventsListPage = lazy(() => import('../features/events/pages/EventsListPage.jsx'));
 const EventDetailPage = lazy(() => import('../features/events/pages/EventDetailPage.jsx'));
+const CreateEventPage = lazy(() => import('../features/events/pages/CreateEventPage.jsx'));
 const LoginPage = lazy(() => import('../features/auth/pages/LoginPage.jsx'));
 const RegisterPage = lazy(() => import('../features/auth/pages/RegisterPage.jsx'));
 const OrganizerDashboardPage = lazy(() => import('../features/dashboard/pages/OrganizerDashboardPage.jsx'));
@@ -36,6 +37,7 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route path="dashboard" element={<OrganizerDashboardPage />} />
+            <Route path="events/new" element={<CreateEventPage />} />
             <Route path="my-registrations" element={<MyRegistrationsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
           </Route>

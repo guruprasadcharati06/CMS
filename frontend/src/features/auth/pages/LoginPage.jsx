@@ -1,25 +1,8 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../AuthProvider.jsx';
-
-const loginUser = async ({ email, password }) => {
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => ({ message: 'Unable to login' }));
-    throw new Error(payload.message || 'Unable to login');
-  }
-
-  return response.json();
-};
+import useLogin from '../api/useLogin.js';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -27,10 +10,13 @@ const LoginPage = () => {
   const { login } = useAuth();
   const [formState, setFormState] = useState({ email: '', password: '' });
 
-  const mutation = useMutation({
-    mutationFn: loginUser,
+  const mutation = useLogin({
     onSuccess: (data) => {
-      login({ token: data.token, user: data.user });
+      login({
+        token: data.token,
+        user: data.user,
+        expiresInMinutes: data.expiresInMinutes,
+      });
       toast.success('Welcome back!');
       const next = location.state?.from?.pathname || '/dashboard';
       navigate(next, { replace: true });

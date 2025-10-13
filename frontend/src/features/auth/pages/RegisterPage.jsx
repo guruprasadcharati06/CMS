@@ -1,25 +1,8 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../AuthProvider.jsx';
-
-const registerUser = async ({ name, email, password, role }) => {
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name, email, password, role }),
-  });
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => ({ message: 'Unable to register' }));
-    throw new Error(payload.message || 'Unable to register');
-  }
-
-  return response.json();
-};
+import useRegister from '../api/useRegister.js';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -31,11 +14,14 @@ const RegisterPage = () => {
     role: 'student',
   });
 
-  const mutation = useMutation({
-    mutationFn: registerUser,
+  const mutation = useRegister({
     onSuccess: (data) => {
       toast.success('Welcome on board!');
-      login({ token: data.token, user: data.user });
+      login({
+        token: data.token,
+        user: data.user,
+        expiresInMinutes: data.expiresInMinutes,
+      });
       navigate('/dashboard', { replace: true });
     },
     onError: (error) => {

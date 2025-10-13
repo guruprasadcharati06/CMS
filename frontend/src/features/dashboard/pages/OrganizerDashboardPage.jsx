@@ -40,7 +40,7 @@ const OrganizerDashboardPage = () => {
             View events
           </Link>
           <Link
-            to="/events/new"
+            to="/dashboard/events/new"
             className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500"
           >
             Create event
