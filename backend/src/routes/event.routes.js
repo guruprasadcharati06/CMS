@@ -10,12 +10,12 @@ import {
   featureEvent,
   cancelEvent,
 } from "../controllers/event.controller.js";
-import { authenticate, authorizeRoles } from "../middleware/authMiddleware.js";
+import { authenticate, authorizeRoles, attachUserIfPresent } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.get("/", listEvents);
-router.get("/:eventId", getEvent);
+router.get("/", attachUserIfPresent, listEvents);
+router.get("/:eventId", attachUserIfPresent, getEvent);
 
 router.post("/", authenticate, authorizeRoles("organizer", "admin"), createEvent);
 router.put("/:eventId", authenticate, authorizeRoles("organizer", "admin"), updateEvent);

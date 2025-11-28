@@ -1,0 +1,64 @@
+{
+  "placeholderImages": [
+    {
+      "id": "event-workshop",
+      "description": "Students collaborating during a workshop.",
+      "imageUrl": "https://images.unsplash.com/photo-1596496356956-bbc213c96988?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx3b3Jrc2hvcCUyMHN0dWRlbnRzfGVufDB8fHx8MTc2NDI1NjM3OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "workshop students"
+    },
+    {
+      "id": "event-seminar",
+      "description": "A speaker presenting at a seminar.",
+      "imageUrl": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjb25mZXJlbmNlJTIwc3BlYWtlcnxlbnwwfHx8fDE3NjQzMDk5MjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "conference speaker"
+    },
+    {
+      "id": "event-music-festival",
+      "description": "A lively outdoor music festival on campus.",
+      "imageUrl": "https://images.unsplash.com/photo-1582711012124-a56cf82307a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMGZlc3RpdmFsfGVufDB8fHx8MTc2NDI5NzI2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music festival"
+    },
+    {
+      "id": "event-art-exhibition",
+      "description": "An art exhibition in a gallery.",
+      "imageUrl": "https://images.unsplash.com/photo-1606819717115-9159c900370b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhcnQlMjBnYWxsZXJ5fGVufDB8fHx8MTc2NDE5NzgwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "art gallery"
+    },
+    {
+      "id": "event-tech-hackathon",
+      "description": "Students coding at a hackathon.",
+      "imageUrl": "https://images.unsplash.com/photo-1561886362-a2b38ce83470?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoYWNrYXRob24lMjBjb2Rpbmd8ZW58MHx8fHwxNzY0MzA5OTI1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hackathon coding"
+    },
+    {
+      "id": "event-sports-day",
+      "description": "Students participating in a race on sports day.",
+      "imageUrl": "https://images.unsplash.com/photo-1596460658047-1826d5921c56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxydW5uaW5nJTIwcmFjZXxlbnwwfHx8fDE3NjQzMDk5MjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "running race"
+    },
+    {
+      "id": "event-career-fair",
+      "description": "Students talking to recruiters at a career fair.",
+      "imageUrl": "https://images.unsplash.com/photo-1561489422-45de3d015e3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYXJlZXIlMjBmYWlyfGVufDB8fHx8MTc2NDMwOTkyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "career fair"
+    },
+    {
+      "id": "event-volunteer-drive",
+      "description": "A group of volunteers working together.",
+      "imageUrl": "https://images.unsplash.com/photo-1758599668234-68f52db62425?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx2b2x1bnRlZXJzJTIwY29tbXVuaXR5fGVufDB8fHx8MTc2NDI0MTI4N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "volunteers community"
+    },
+    {
+      "id": "qr-code-placeholder",
+      "description": "A placeholder QR code.",
+      "imageUrl": "https://images.unsplash.com/photo-1662383729882-e03ce8e00887?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxxciUyMGNvZGV8ZW58MHx8fHwxNzY0MjIyOTYyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "qr code"
+    },
+    {
+      "id": "user-avatar-1",
+      "description": "User avatar.",
+      "imageUrl": "https://images.unsplash.com/photo-1521119989659-a83eee488004?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjQyNzA2MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    }
+  ]
+}

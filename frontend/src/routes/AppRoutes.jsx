@@ -14,6 +14,7 @@ const OrganizerDashboardPage = lazy(() => import('../features/dashboard/pages/Or
 const AdminApprovalPage = lazy(() => import('../features/dashboard/pages/AdminApprovalPage.jsx'));
 const MyRegistrationsPage = lazy(() => import('../features/registrations/pages/MyRegistrationsPage.jsx'));
 const NotificationsPage = lazy(() => import('../features/notifications/pages/NotificationsPage.jsx'));
+const StudentPortalPage = lazy(() => import('../features/student/pages/StudentPortalPage.jsx'));
 const NotFoundPage = lazy(() => import('../features/misc/NotFoundPage.jsx'));
 
 const SuspenseFallback = () => (
@@ -28,18 +29,26 @@ const AppRoutes = () => {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route index element={<LandingPage />} />
-          <Route path="events" element={<EventsListPage />} />
-          <Route path="events/:eventId" element={<EventDetailPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
+          <Route element={<PublicLayout />}>
+            <Route path="events" element={<EventsListPage />} />
+            <Route path="events/:eventId" element={<EventDetailPage />} />
+          </Route>
           <Route element={<DashboardLayout />}>
             <Route path="dashboard" element={<OrganizerDashboardPage />} />
             <Route path="events/new" element={<CreateEventPage />} />
             <Route path="my-registrations" element={<MyRegistrationsPage />} />
             <Route path="notifications" element={<NotificationsPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+          <Route element={<PublicLayout />}>
+            <Route path="student" element={<StudentPortalPage />} />
           </Route>
         </Route>
 

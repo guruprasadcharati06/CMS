@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../AuthProvider.jsx';
 import useRegister from '../api/useRegister.js';
+import useRequestRegistrationOtp from '../api/useRequestRegistrationOtp.js';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -12,7 +13,11 @@ const RegisterPage = () => {
     email: '',
     password: '',
     role: 'student',
+    otp: '',
+    college: '',
+    phone: '',
   });
+  const [otpSent, setOtpSent] = useState(false);
 
   const mutation = useRegister({
     onSuccess: (data) => {
@@ -29,6 +34,16 @@ const RegisterPage = () => {
     },
   });
 
+  const requestOtpMutation = useRequestRegistrationOtp({
+    onSuccess: () => {
+      setOtpSent(true);
+      toast.success('OTP sent to your email');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to send OTP');
+    },
+  });
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
@@ -37,6 +52,15 @@ const RegisterPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     mutation.mutate(formState);
+  };
+
+  const handleRequestOtp = () => {
+    if (!formState.email) {
+      toast.error('Enter an email first');
+      return;
+    }
+
+    requestOtpMutation.mutate({ email: formState.email });
   };
 
   return (
@@ -57,7 +81,7 @@ const RegisterPage = () => {
             required
             value={formState.name}
             onChange={handleChange}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
             placeholder="Jane Doe"
           />
         </div>
@@ -73,9 +97,54 @@ const RegisterPage = () => {
             required
             value={formState.email}
             onChange={handleChange}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
             placeholder="you@example.com"
           />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="phone" className="text-sm font-medium text-slate-700">
+            Phone number
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            value={formState.phone}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            placeholder="Enter 10-digit phone"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="otp" className="text-sm font-medium text-slate-700">
+              Email OTP
+            </label>
+            <button
+              type="button"
+              onClick={handleRequestOtp}
+              disabled={requestOtpMutation.isPending || !formState.email}
+              className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 disabled:opacity-60"
+            >
+              {requestOtpMutation.isPending ? 'Sending…' : otpSent ? 'Resend OTP' : 'Send OTP'}
+            </button>
+          </div>
+          <input
+            id="otp"
+            name="otp"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]{6}"
+            required
+            value={formState.otp}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            placeholder="Enter 6-digit OTP"
+          />
+          <p className="text-xs text-slate-500">Check your inbox for the 6-digit code. OTP expires in 10 minutes.</p>
         </div>
 
         <div className="space-y-2">
@@ -89,7 +158,7 @@ const RegisterPage = () => {
             required
             value={formState.password}
             onChange={handleChange}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
             placeholder="••••••••"
           />
         </div>
@@ -103,12 +172,28 @@ const RegisterPage = () => {
             name="role"
             value={formState.role}
             onChange={handleChange}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
           >
             <option value="student">Student / Attendee</option>
             <option value="organizer">Organizer</option>
             <option value="admin">Admin (demo)</option>
           </select>
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="college" className="text-sm font-medium text-slate-700">
+            College
+          </label>
+          <input
+            id="college"
+            name="college"
+            type="text"
+            required
+            value={formState.college}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            placeholder="e.g. Sunrise Institute of Technology"
+          />
         </div>
 
         <button

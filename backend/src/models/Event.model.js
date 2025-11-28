@@ -21,6 +21,11 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    college: {
+      type: String,
+      trim: true,
+      index: true,
+    },
     startDate: {
       type: Date,
       required: true,
@@ -75,6 +80,7 @@ eventSchema.index({ title: "text", description: "text" });
 eventSchema.index({ tags: 1 });
 eventSchema.index({ startDate: 1, endDate: 1 });
 eventSchema.index({ organizer: 1, status: 1 });
+eventSchema.index({ college: 1, status: 1, startDate: 1 });
 
 const Event = mongoose.model("Event", eventSchema);
 

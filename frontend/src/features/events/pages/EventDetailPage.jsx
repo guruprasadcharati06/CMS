@@ -1,17 +1,61 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import useEvent from '../api/useEvent.js';
+import useRegisterForEvent from '../../registrations/api/useRegisterForEvent.js';
+import useCancelRegistration from '../../registrations/api/useCancelRegistration.js';
+import { useAuth } from '../../auth/AuthProvider.jsx';
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
+  const { user } = useAuth();
   const {
-    data: event,
+    data,
     isLoading,
     isError,
     error,
     refetch,
   } = useEvent(eventId);
+
+  const event = data?.event;
+  const registration = data?.registration;
+  const organizerRegistrations = data?.registrations ?? [];
+
+  const isStudent = user?.role === 'student';
+  const isOrganizer = user?.role === 'organizer';
+  const isAdmin = user?.role === 'admin';
+  const isRegistered = Boolean(registration);
+
+  const registerMutation = useRegisterForEvent({
+    onSuccess: (reg) => {
+      const title = reg?.event?.title ?? 'event';
+      toast.success(`Registered for ${title}`);
+    },
+    onError: (mutError) => {
+      toast.error(mutError.message || 'Failed to register');
+    },
+  });
+  const cancelMutation = useCancelRegistration({
+    onSuccess: (reg) => {
+      const title = reg?.event?.title ?? 'event';
+      toast.success(`Registration cancelled for ${title}`);
+    },
+    onError: (mutError) => {
+      toast.error(mutError.message || 'Failed to cancel registration');
+    },
+  });
+
+  const attendeeName = useMemo(() => (user?.name ? user.name.split(' ')[0] : 'You'), [user?.name]);
+
+  const handleToggleRegistration = () => {
+    if (!event?._id || (!isStudent && !isAdmin)) return;
+    if (isRegistered) {
+      cancelMutation.mutate(event._id);
+    } else {
+      registerMutation.mutate(event._id);
+    }
+  };
 
   const scheduleText = useMemo(() => {
     if (!event?.startDate || !event?.endDate) return 'Schedule TBA';
@@ -118,12 +162,36 @@ const EventDetailPage = () => {
             <dd>{event.organizer?.name || 'TBA'}</dd>
           </div>
         </dl>
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow hover:bg-indigo-500"
-        >
-          Register now
-        </button>
+        {(isStudent || isAdmin) && (
+          <>
+            {isRegistered ? (
+              <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-700">
+                You&apos;re registered, {attendeeName}! We&apos;ve shared your name, email, and phone with the organiser.
+              </div>
+            ) : null}
+            <button
+              type="button"
+              onClick={handleToggleRegistration}
+              disabled={registerMutation.isPending || cancelMutation.isPending}
+              className={`mt-4 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
+                isRegistered
+                  ? 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                  : 'bg-indigo-600 text-white hover:bg-indigo-500'
+              } disabled:opacity-60`}
+            >
+              {registerMutation.isPending || cancelMutation.isPending
+                ? 'Processing…'
+                : isRegistered
+                ? 'Registered — Cancel?'
+                : 'Register now'}
+            </button>
+          </>
+        )}
+        {!isStudent && !isAdmin && (
+          <p className="text-sm text-slate-500">
+            Registration actions are available from a student account.
+          </p>
+        )}
       </section>
       <aside className="space-y-5">
         <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -138,6 +206,31 @@ const EventDetailPage = () => {
         <article className="rounded-3xl border border-indigo-100 bg-indigo-50 p-6 text-sm text-indigo-600">
           Organizers can manage registrations, send updates, and monitor feedback directly from the dashboard.
         </article>
+        {(isOrganizer || isAdmin) && (
+          <article className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <header>
+              <h2 className="text-lg font-semibold text-slate-900">Registrations</h2>
+              <p className="text-xs text-slate-500">
+                {organizerRegistrations.length}
+                {organizerRegistrations.length === 1 ? ' attendee' : ' attendees'}
+              </p>
+            </header>
+            {organizerRegistrations.length ? (
+              <ul className="space-y-3 text-sm text-slate-600">
+                {organizerRegistrations.map((registration) => (
+                  <li key={registration._id} className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+                    <p className="font-medium text-slate-900">{registration.attendee?.name || 'Student'}</p>
+                    <p>{registration.attendee?.email}</p>
+                    <p>{registration.attendee?.phone}</p>
+                    <p className="text-xs text-slate-500">{registration.attendee?.college || 'College not specified'}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-slate-500">No registrations yet.</p>
+            )}
+          </article>
+        )}
       </aside>
     </div>
   );

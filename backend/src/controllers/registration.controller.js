@@ -39,6 +39,11 @@ export const registerForEvent = async (req, res) => {
       checkInCode: generateCheckInCode(),
     });
 
+    const populatedRegistration = await registration.populate([
+      { path: "event", select: "title startDate venue organizer registeredCount capacity" },
+      { path: "attendee", select: "name email phone college" },
+    ]);
+
     await Event.findByIdAndUpdate(eventId, { $inc: { registeredCount: 1 } });
 
     await notify({
@@ -57,7 +62,7 @@ export const registerForEvent = async (req, res) => {
       type: "update",
     });
 
-    return res.status(201).json({ registration });
+    return res.status(201).json({ registration: populatedRegistration });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(409).json({ message: "Already registered" });
@@ -98,7 +103,12 @@ export const cancelRegistration = async (req, res) => {
       type: "alert",
     });
 
-    return res.status(200).json({ registration });
+    const populatedRegistration = await registration.populate([
+      { path: "event", select: "title startDate venue organizer registeredCount capacity" },
+      { path: "attendee", select: "name email phone college" },
+    ]);
+
+    return res.status(200).json({ registration: populatedRegistration });
   } catch (error) {
     return res.status(500).json({ message: "Failed to cancel registration" });
   }
@@ -130,7 +140,7 @@ export const getRegistrationsForEvent = async (req, res) => {
     }
 
     const registrations = await Registration.find({ event: eventId })
-      .populate("attendee", "name email department")
+      .populate("attendee", "name email phone college department")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({ registrations });

@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.routes.js";
 import eventRouter from "./routes/event.routes.js";
 import registrationRouter from "./routes/registration.routes.js";
 import notificationRouter from "./routes/notification.routes.js";
+import intelligenceRouter from "./routes/intelligence.routes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/registrations", registrationRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/intelligence", intelligenceRouter);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

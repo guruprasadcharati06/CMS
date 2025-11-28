@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    college: {
+      type: String,
+      trim: true,
+      index: true,
+    },
     avatarUrl: {
       type: String,
       trim: true,
